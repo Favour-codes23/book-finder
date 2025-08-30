@@ -2,7 +2,7 @@ import React from "react";
 
 function BookList({ books }) {
   if (!books || books.length === 0) {
-    return <p>No books found. Try another search</p>;
+    return <p style={{ textAlign: "center", color: "#555" }}>No books found. Try another search</p>;
   }
 
   return (
@@ -26,6 +26,15 @@ function BookList({ books }) {
               padding: "15px",
               backgroundColor: "#fff",
               boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+              transition: "transform 0.2s", 
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "scale(1.03)";
+              e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.2)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
+              e.currentTarget.style.boxShadow = "0 2px 5px rgba(0,0,0,0.1)";
             }}
           >
             {/* Book Cover */}
