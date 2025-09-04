@@ -1,12 +1,23 @@
 .app-container {
-  font-family: 'Arial, sans-serif';
-  background-color: #fafafa;
+  font-family: 'Georgia, serif';
+  background-color: #faf7f0; /* Warm cream background */
   min-height: 100vh;
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
 
+/* =======================
+   Header Container
+======================= */
+.header-container {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+/* =======================
+   Book List & Cards
+======================= */
 .book-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -17,124 +28,150 @@
 .no-books {
   text-align: center;
   padding: 2rem;
-  background: #f8f9fa;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  color: #444;
+  background: #f5f2e8; /* Slightly darker cream */
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(139, 115, 85, 0.15);
+  color: #5d4e37; /* Warm brown text */
   margin-top: 3rem;
   max-width: 400px;
   margin-left: auto;
   margin-right: auto;
   transition: all 0.3s ease;
+  border: 1px solid #e8dcc0;
 }
 
 .no-books h2 {
-  margin:0.5rem 0;
+  margin: 0.5rem 0;
   font-size: 1.5rem;
-  color: #333;
+  color: #4a3c28;
 }
 
 .no-books p {
-  color: #666;
+  color: #6b5b3d;
   font-size: 1rem;
 }
 
 .book-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  border: 1px solid #e8dcc0; /* Warm beige border */
+  border-radius: 12px;
   padding: 15px;
-  background-color: #fff;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background-color: #fefcf7; /* Off-white, paper-like */
+  box-shadow: 0 3px 8px rgba(139, 115, 85, 0.12);
   transition: transform 0.2s ease, box-shadow 0.2s ease; 
+  cursor: pointer;
 }
 
 .book-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 5px 14px rgba(0,0,0,0.16);
+  box-shadow: 0 6px 20px rgba(139, 115, 85, 0.2);
+  border-color: #d4c4a0;
 }
 
 .book-img {
   width: 100%;
   height: 250px;
   object-fit: cover;
-  border-radius: 5px;
+  border-radius: 8px;
 }
 
-.book-img.placeholder {
+.book-img-placeholder {
+  width: 100%;
+  height: 250px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f0f0f0;
-  color: #666;
+  background-color: #f0ebe0;
+  color: #8b7355;
   font-size: 14px;
-  border-radius: 5px;
+  border-radius: 8px;
+  border: 2px dashed #d4c4a0;
 }
 
 .book-title {
   font-size: 16px;
   margin: 10px 0;
   font-weight: 600;
-  color: #222;
+  color: #3a2f1f; /* Dark brown */
 }
 
 .book-author {
   font-size: 14px;
-  color: #555;
+  color: #6b5b3d;
   margin-bottom: 8px;
 }
 
 .book-desc {
   font-size: 13px;
-  color: #666;
+  color: #7a6b4f;
   margin-bottom: 10px;
   line-height: 1.4;
   display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;  
-    overflow: hidden;
-
-    line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+  line-clamp: 3;
 }
 
-.preview-link
-.preview-btn {
-  display: inline-block;
-  margin-top: auto;
-  padding: 8px 12px;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 5px;
-  font-size: 14px;
-  font-weight: 600;
-  text-align: center;
-  transition: background 0.2s ease;
-}
-
-.preview-link:hover
-.preview-btn {
-  background-color: #0056b3;
-}
-
+/* =======================
+   Header
+======================= */
 .header {
   text-align: center;
-  margin-bottom: 16px;
-  padding: 20px;
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
-  color: white;
-  border-radius: 8px;
+  padding: 25px;
+  background: linear-gradient(135deg, #8b4513, #cd853f, #daa520); /* Warm brown to gold */
+  color: #fefcf7;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
 }
 
 .header-title {
   font-size: 28px;
   margin: 0 0 6px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
 .header-subtitle {
   font-size: 16px;
-  opacity: 0.9;
+  opacity: 0.95;
   margin: 0;
 }
 
+/* =======================
+   Navigation
+======================= */
+.main-nav {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 6px;
+  z-index: 10;
+}
+
+.main-nav .btn {
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  background: rgba(254, 252, 247, 0.25); /* Warm white transparency */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(254, 252, 247, 0.4);
+  color: #fefcf7;
+  font-family: 'Georgia, serif';
+}
+
+.main-nav .btn:hover {
+  background: rgba(254, 252, 247, 0.35);
+  transform: scale(1.05);
+}
+
+.main-nav .btn.active {
+  background: rgba(254, 252, 247, 0.5);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(254, 252, 247, 0.3);
+}
+
+/* =======================
+   Search Bar
+======================= */
 .search-bar {
   display: flex; 
   justify-content: center; 
@@ -143,74 +180,466 @@
 }
 
 .search-input {
-  padding: 10px 15px; 
+  padding: 12px 18px; 
   font-size: 16px;
   width: 60%;
   min-width: 260px;
-  border-radius: 5px; 
-  border: 1px solid #ccc;
+  border-radius: 8px; 
+  border: 2px solid #e8dcc0;
+  background-color: #fefcf7;
+  color: #3a2f1f;
+  font-family: 'Georgia, serif';
   transition: border 0.2s ease;
 }
 
 .search-input:focus {
-  border-color: #2575fc;
+  border-color: #cd853f;
   outline: none;
+  box-shadow: 0 0 8px rgba(205, 133, 63, 0.2);
 }
 
-.search-btn {
-  background: #2575fc;
-  color: white;
+/* =======================
+   Buttons (Book Page Theme)
+======================= */
+.btn {
+  background: linear-gradient(135deg, #8b4513, #cd853f);
+  color: #fefcf7;
   border: none;
-  border-radius: 5px; 
-  padding: 10px 20px;
-  font-size: 16px;
+  border-radius: 8px; 
+  padding: 12px 20px;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background 0.2s ease;
+  font-weight: 600;
+  font-family: 'Georgia, serif';
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+  box-shadow: 0 2px 6px rgba(139, 69, 19, 0.25);
 }
 
-.search-btn:hover {
-  background: #1a5edb;
+.btn:hover {
+  background: linear-gradient(135deg, #a0522d, #daa520);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
 }
 
-.spinner {
-    border: 6px solid #f3f3f3;
-    border-top: 6px solid #0077ff;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin: 20px auto;
-    }
+.btn-small {
+  padding: 8px 14px;
+  font-size: 0.9rem;
+}
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+.btn-secondary {
+  background: linear-gradient(135deg, #6b5b3d, #8b7355);
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(135deg, #7a6b4f, #a0926b);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #8b4142, #cd5c5c);
+}
+
+.btn-danger:hover {
+  background: linear-gradient(135deg, #a0474a, #dc7878);
 }
 
 .load-more-container {
-  text-align: center;
+  display: flex;
+  justify-content: center;
   margin: 20px 0;
 }
 
-.load-more-btn {
-  background: #0077ff;
-  color: white;
+/* =======================
+   Reading Progress (NEW)
+======================= */
+.reading-item {
+  background: #f9f6f0;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #e8dcc0;
+}
+
+.progress-section {
+  background: #fefcf7;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #f0ebe0;
+  margin-top: 10px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  color: #5d4e37;
+}
+
+.progress-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.progress-input {
+  padding: 6px 10px;
+  border: 1px solid #e8dcc0;
+  border-radius: 6px;
+  background: #fefcf7;
+  color: #3a2f1f;
+  font-size: 0.9rem;
+  width: 120px;
+}
+
+.progress-input:focus {
+  border-color: #cd853f;
+  outline: none;
+}
+
+.book-metadata {
+  padding: 8px 0;
+  border-top: 1px solid #f0ebe0;
+  margin-top: 8px;
+}
+
+.rating-display {
+  font-size: 1.1rem;
+  margin-top: 4px;
+}
+
+/* =======================
+   Spinner
+======================= */
+.spinner {
+  border: 6px solid #f0ebe0;
+  border-top: 6px solid #cd853f;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* =======================
+   Modal
+======================= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(90, 60, 40, 0.7); /* Warm dark overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fefcf7; /* Paper white */
+  padding: 2rem;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  animation: fadeInUp 0.3s ease;
+  box-shadow: 0 8px 32px rgba(139, 69, 19, 0.3);
+  border: 1px solid #e8dcc0;
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: transparent;
   border: none;
-  border-radius: 5px; 
-  padding: 10px 20px;
-  font-size: 1rem;
+  font-size: 1.5rem;
   cursor: pointer;
-  transition: background 0.3s ease transform 0.2s ease;
+  color: #5d4e37;
+  transition: color 0.2s ease;
 }
 
-.load-more-btn:hover {
-  background: #005fcc;
-  transform: scale(1.05);
+.modal-close:hover {
+  color: #3a2f1f;
 }
 
+.modal-img {
+  max-width: 150px;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(139, 115, 85, 0.2);
+}
+
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* =======================
+   Error Message
+======================= */
 .error {
   text-align: center;
   margin-top: 20px;
   font-size: 16px;
-  color: red;
+  color: #8b4142;
+  background: #faf2f2;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #e8d4d4;
+}
+
+/* =======================
+   Goal Item Layout
+======================= */
+.goal-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* make BookList inside Goal/Read a little tighter */
+.goal-item .book-list,
+.goal-item .book-card {
+  margin: 0;
+  padding: 0;
+}
+
+/* Your existing App.css styles remain the same, plus these additions: */
+
+/* Sidebar Styles */
+.sidebar-nav-btn:hover {
+  background-color: #f0ebe0 !important;
+}
+
+.sidebar-nav-btn.active:hover {
+  background-color: #e8dcc0 !important;
+}
+
+/* Main content adjustments for sidebar */
+.main-content {
+  transition: margin-left 0.3s ease;
+}
+
+/* Mobile Header (hidden by default, shown on mobile) */
+.mobile-header {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #8b4513, #cd853f);
+  color: #fefcf7;
+  border-bottom: 2px solid #e8dcc0;
+}
+
+.mobile-header h1 {
+  font-size: 1.2rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .mobile-header {
+    display: flex !important;
+  }
+  
+  .main-content {
+    margin-left: 0 !important;
+  }
+  
+  .sidebar {
+    left: -280px !important;
+  }
+  
+  .sidebar.open {
+    left: 0 !important;
+  }
+  
+  .app-container {
+    padding: 0;
+  }
+  
+  .header-container {
+    display: none; /* Hide main header on mobile since we have mobile header */
+  }
+  
+  .book-list {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    padding: 15px;
+  }
+  
+  .book-card {
+    padding: 12px;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-header {
+    display: none !important;
+  }
+}
+
+/* Updated Reading Item Styles */
+.reading-item {
+  background: #f9f6f0;
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid #e8dcc0;
+  margin-bottom: 16px;
+}
+
+.progress-section {
+  background: #fefcf7;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #f0ebe0;
+  margin-top: 12px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+  color: #5d4e37;
+  font-weight: 500;
+}
+
+.progress-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.progress-input {
+  padding: 8px 12px;
+  border: 1px solid #e8dcc0;
+  border-radius: 6px;
+  background: #fefcf7;
+  color: #3a2f1f;
+  font-size: 0.9rem;
+  width: 120px;
+  font-family: 'Georgia, serif';
+}
+
+.progress-input:focus {
+  border-color: #cd853f;
+  outline: none;
+  box-shadow: 0 0 8px rgba(205, 133, 63, 0.2);
+}
+
+/* Enhanced Book Metadata */
+.book-metadata {
+  padding: 12px 0 8px 0;
+  border-top: 1px solid #f0ebe0;
+  margin-top: 12px;
+}
+
+.book-metadata p {
+  margin: 4px 0;
+  line-height: 1.4;
+}
+
+/* Goal Item Improvements */
+.goal-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.goal-item .book-list,
+.goal-item .book-card {
+  margin: 0;
+  padding: 0;
+}
+
+/* Button Groups */
+.button-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Sidebar Toggle Button Styles */
+.sidebar-toggle {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1001;
+  background: linear-gradient(135deg, #8b4513, #cd853f);
+  color: #fefcf7;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: 'Georgia, serif';
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+  transition: all 0.2s ease;
+}
+
+.sidebar-toggle:hover {
+  background: linear-gradient(135deg, #a0522d, #daa520);
+  transform: scale(1.05);
+}
+
+/* Analytics Responsive Design */
+@media (max-width: 768px) {
+  .analytics-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .analytics-two-column {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Enhanced Hover Effects */
+.book-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 25px rgba(139, 115, 85, 0.25);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Improved Focus States */
+.search-input:focus,
+.progress-input:focus {
+  transform: translateY(-1px);
+}
+
+/* Loading Animation Enhancement */
+.spinner {
+  border: 8px solid #f0ebe0;
+  border-top: 8px solid #cd853f;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 30px auto;
+}
+
+/* Better Modal on Mobile */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    max-width: none;
+    margin: 20px;
+    max-height: 90vh;
+  }
 }
