@@ -181,7 +181,7 @@ function App() {
     );
   };
 
-  // Helper to render the Goal page UI
+  // Helper to render the Goal page ui
   const renderGoalPage = () => {
     return (
       <div>
@@ -226,7 +226,7 @@ function App() {
               </div>
             ))}
           </div>
-        )}
+        )} 
       </div>
     );
   };
