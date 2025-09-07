@@ -8,6 +8,7 @@ function Sidebar({ currentPage, setCurrentPage, sidebarOpen, setSidebarOpen, goa
     const thisYear = now.getFullYear();
     
     const booksThisMonth = readBooks.filter(book => {
+      if (!book.finishedDate) return false;
       const finishedDate = new Date(book.finishedDate);
       return finishedDate.getMonth() === thisMonth && finishedDate.getFullYear() === thisYear;
     }).length;
@@ -265,6 +266,30 @@ function Sidebar({ currentPage, setCurrentPage, sidebarOpen, setSidebarOpen, goa
             >
               <span style={{ fontSize: "1.2rem" }}>📊</span>
               Reading Analytics
+            </button>
+
+            <button
+              onClick={() => { setCurrentPage("data"); setSidebarOpen(false); }}
+              className={`sidebar-nav-btn ${currentPage === "data" ? "active" : ""}`}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                padding: "12px 16px",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontSize: "1rem",
+                fontFamily: "Georgia, serif",
+                width: "100%",
+                textAlign: "left",
+                transition: "all 0.2s ease",
+                backgroundColor: currentPage === "data" ? "#e8dcc0" : "transparent",
+                color: currentPage === "data" ? "#3a2f1f" : "#5d4e37"
+              }}
+            >
+              <span style={{ fontSize: "1.2rem" }}>💾</span>
+              Data Management
             </button>
           </div>
 

@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Header from "./components/Header";
 import SearchBar from "./components/SearchBar";
 import BookList from "./components/BookList";
 import BookModal from "./components/BookModal";
-import Sidebar from "./components/Sidebar";
+import Sidebar from "./components/SideBar";
 import ReadingAnalytics from "./components/ReadingAnalytics";
+import ReviewModal from "./components/ReviewModal";
+import EditBookModal from "./components/EditBookModal";
+import DataManager from "./components/DataManager";
 import "./App.css";
-
 
 function App() {
   // existing app state
@@ -17,20 +19,90 @@ function App() {
   const [page, setPage] = useState(0);
   const [selectedBook, setSelectedBook] = useState(null);
 
-  // navigation + shelves
+  // navigation + shelves - removed hardcoded data, will load from localStorage
   const [currentPage, setCurrentPage] = useState("home");
   const [goalBooks, setGoalBooks] = useState([]);
-  const [readBooks, setReadBooks] = useState([
-    { id: 1, title: "The Great Gatsby", author: "F. Scott Fitzgerald", finishedDate: "2024-08-15", pages: 180, genre: "Fiction" },
-    { id: 2, title: "To Kill a Mockingbird", author: "Harper Lee", finishedDate: "2024-08-28", pages: 281, genre: "Fiction" },
-    { id: 3, title: "1984", author: "George Orwell", finishedDate: "2024-09-02", pages: 328, genre: "Dystopian" },
-  ]);
-  const [currentlyReading, setCurrentlyReading] = useState([
-    { id: 4, title: "Dune", author: "Frank Herbert", currentPage: 150, totalPages: 688, startDate: "2024-08-20" }
-  ]);
+  const [readBooks, setReadBooks] = useState([]);
+  const [currentlyReading, setCurrentlyReading] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  // New state for review system
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [bookToReview, setBookToReview] = useState(null);
+
+  // New state for editing functionality
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [bookToEdit, setBookToEdit] = useState(null);
+  const [bookEditType, setBookEditType] = useState(""); // "goal", "currentlyReading", or "read"
 
   const maxResults = 10;
+
+  // Storage keys - memoized to avoid dependency issues
+  const STORAGE_KEYS = useMemo(() => ({
+    goalBooks: 'bookish-goal-books',
+    readBooks: 'bookish-read-books', 
+    currentlyReading: 'bookish-currently-reading'
+  }), []);
+
+  // Helper function to safely parse JSON from localStorage
+  const getFromStorage = useCallback((key) => {
+    try {
+      const item = localStorage.getItem(key);
+      if (item === null) return [];
+      return JSON.parse(item);
+    } catch (error) {
+      console.error(`Error loading ${key} from localStorage:`, error);
+      return [];
+    }
+  }, []);
+
+  // Helper function to safely save to localStorage
+  const saveToStorage = useCallback((key, data) => {
+    try {
+      localStorage.setItem(key, JSON.stringify(data));
+      console.log(`Saved ${key} to localStorage:`, data.length, 'items');
+    } catch (error) {
+      console.error(`Error saving ${key} to localStorage:`, error);
+    }
+  }, []);
+
+  // Load data from localStorage on component mount
+  useEffect(() => {
+    console.log('Loading data from localStorage...');
+    
+    const savedGoalBooks = getFromStorage(STORAGE_KEYS.goalBooks);
+    const savedReadBooks = getFromStorage(STORAGE_KEYS.readBooks);
+    const savedCurrentlyReading = getFromStorage(STORAGE_KEYS.currentlyReading);
+
+    console.log('Loaded goal books:', savedGoalBooks.length);
+    console.log('Loaded read books:', savedReadBooks.length);
+    console.log('Loaded currently reading:', savedCurrentlyReading.length);
+
+    setGoalBooks(savedGoalBooks);
+    setReadBooks(savedReadBooks);
+    setCurrentlyReading(savedCurrentlyReading);
+    setDataLoaded(true);
+  }, [getFromStorage, STORAGE_KEYS.goalBooks, STORAGE_KEYS.readBooks, STORAGE_KEYS.currentlyReading]);
+
+  // Save to localStorage whenever the arrays change (but only after initial load)
+  useEffect(() => {
+    if (dataLoaded) {
+      saveToStorage(STORAGE_KEYS.goalBooks, goalBooks);
+    }
+  }, [goalBooks, dataLoaded, saveToStorage, STORAGE_KEYS.goalBooks]);
+
+  useEffect(() => {
+    if (dataLoaded) {
+      saveToStorage(STORAGE_KEYS.readBooks, readBooks);
+    }
+  }, [readBooks, dataLoaded, saveToStorage, STORAGE_KEYS.readBooks]);
+
+  useEffect(() => {
+    if (dataLoaded) {
+      saveToStorage(STORAGE_KEYS.currentlyReading, currentlyReading);
+    }
+  }, [currentlyReading, dataLoaded, saveToStorage, STORAGE_KEYS.currentlyReading]);
 
   // existing search function
   const searchBooks = async (newQuery, reset = false) => {
@@ -78,19 +150,42 @@ function App() {
   const addToGoal = (book) => {
     setGoalBooks((prev) => {
       if (prev.some((b) => b.id === book.id)) return prev;
-      return [book, ...prev];
+      const newBooks = [book, ...prev];
+      console.log('Adding book to goal. New count:', newBooks.length);
+      return newBooks;
     });
     setSelectedBook(null);
     setCurrentPage("goal");
   };
 
-  // mark a Goal book as Read
+  // mark a Goal book as Read with rating/review
   const markAsRead = (book) => {
     setGoalBooks((prev) => prev.filter((b) => b.id !== book.id));
+    setBookToReview(book);
+    setReviewModalOpen(true);
+  };
+
+  // Handle adding a book with review to read books
+  const addBookWithReview = (book, rating, review) => {
+    const bookWithReview = {
+      ...book,
+      rating,
+      review,
+      finishedDate: new Date().toISOString().split('T')[0],
+      pages: book.volumeInfo?.pageCount || book.totalPages || 200,
+      genre: book.volumeInfo?.categories?.[0] || "Fiction",
+      title: book.title || book.volumeInfo?.title || "Unknown Title",
+      author: book.author || book.volumeInfo?.authors?.join(", ") || "Unknown Author"
+    };
+
     setReadBooks((prev) => {
       if (prev.some((b) => b.id === book.id)) return prev;
-      return [book, ...prev];
+      const newBooks = [bookWithReview, ...prev];
+      console.log('Adding book to read books. New count:', newBooks.length);
+      return newBooks;
     });
+    setReviewModalOpen(false);
+    setBookToReview(null);
   };
 
   // start reading a book from TBR
@@ -104,20 +199,131 @@ function App() {
     }]);
   };
 
-  // mark currently reading book as finished
+  // mark currently reading book as finished with review
   const markCurrentAsFinished = (book) => {
     setCurrentlyReading((prev) => prev.filter((b) => b.id !== book.id));
-    setReadBooks((prev) => [...prev, {
-      ...book,
-      finishedDate: new Date().toISOString().split('T')[0],
-      pages: book.totalPages || 200,
-      genre: "Fiction" // Default genre
-    }]);
+    setBookToReview(book);
+    setReviewModalOpen(true);
+  };
+
+  // Update reading progress
+  const updateReadingProgress = (bookId, newPage) => {
+    setCurrentlyReading((prev) => 
+      prev.map((book) => 
+        book.id === bookId 
+          ? { ...book, currentPage: Math.min(Math.max(0, newPage), book.totalPages) }
+          : book
+      )
+    );
+  };
+
+  // Edit book functionality
+  const openEditModal = (book, bookType) => {
+    setBookToEdit(book);
+    setBookEditType(bookType);
+    setEditModalOpen(true);
+  };
+
+  const saveEditedBook = (updatedBook) => {
+    switch (bookEditType) {
+      case "goal":
+        setGoalBooks((prev) => 
+          prev.map((book) => book.id === updatedBook.id ? updatedBook : book)
+        );
+        break;
+      case "currentlyReading":
+        setCurrentlyReading((prev) => 
+          prev.map((book) => book.id === updatedBook.id ? updatedBook : book)
+        );
+        break;
+      case "read":
+        setReadBooks((prev) => 
+          prev.map((book) => book.id === updatedBook.id ? updatedBook : book)
+        );
+        break;
+      default:
+        break;
+    }
+    setEditModalOpen(false);
+    setBookToEdit(null);
+    setBookEditType("");
+  };
+
+  // Import data functionality
+  const handleImportData = (importedData) => {
+    setGoalBooks(importedData.goalBooks || []);
+    setReadBooks(importedData.readBooks || []);
+    setCurrentlyReading(importedData.currentlyReading || []);
   };
 
   const isBookInGoal = (book) => {
     if (!book) return false;
     return goalBooks.some((b) => b.id === book.id);
+  };
+
+  // Component for individual currently reading items
+  const CurrentlyReadingItem = ({ book, onUpdateProgress, onMarkAsFinished, onSelectBook, onEdit }) => {
+    const [tempPage, setTempPage] = useState(book.currentPage);
+
+    return (
+      <div className="reading-item">
+        <div onClick={() => onSelectBook(book)} style={{ cursor: "pointer" }}>
+          <h3 className="book-title">{book.title}</h3>
+          <p className="book-author">by {book.author || book.volumeInfo?.authors?.join(", ") || "Unknown Author"}</p>
+        </div>
+
+        <div className="progress-section">
+          <div className="progress-info">
+            <span>Progress: {book.currentPage}/{book.totalPages} pages</span>
+            <span>{Math.round((book.currentPage / book.totalPages) * 100)}%</span>
+          </div>
+          <div style={{ width: "100%", backgroundColor: "#f0ebe0", borderRadius: "8px", height: "8px" }}>
+            <div 
+              style={{ 
+                width: `${(book.currentPage / book.totalPages) * 100}%`,
+                backgroundColor: "#cd853f",
+                height: "8px",
+                borderRadius: "8px",
+                transition: "width 0.3s ease"
+              }}
+            ></div>
+          </div>
+
+          <div className="progress-controls" style={{ marginTop: "10px" }}>
+            <input 
+              type="number" 
+              className="progress-input"
+              placeholder="Current page"
+              value={tempPage}
+              onChange={(e) => setTempPage(parseInt(e.target.value) || 0)}
+              max={book.totalPages}
+              min={0}
+            />
+            <button 
+              className="btn btn-small"
+              onClick={() => {
+                onUpdateProgress(book.id, tempPage);
+              }}
+            >
+              Update Progress
+            </button>
+            <button 
+              className="btn btn-small"
+              onClick={() => onMarkAsFinished(book)}
+            >
+              Mark as Finished
+            </button>
+            <button 
+              className="btn btn-small btn-secondary"
+              onClick={() => onEdit(book, "currentlyReading")}
+              title="Edit book details"
+            >
+              Edit
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   // Helper to render the Currently Reading page
@@ -133,47 +339,14 @@ function App() {
         ) : (
           <div className="book-list" style={{ padding: "1rem" }}>
             {currentlyReading.map((book) => (
-              <div key={book.id} className="reading-item">
-                <div onClick={() => setSelectedBook(book)} style={{ cursor: "pointer" }}>
-                  <h3 className="book-title">{book.title}</h3>
-                  <p className="book-author">by {book.author}</p>
-                </div>
-
-                <div className="progress-section">
-                  <div className="progress-info">
-                    <span>Progress: {book.currentPage}/{book.totalPages} pages</span>
-                    <span>{Math.round((book.currentPage / book.totalPages) * 100)}%</span>
-                  </div>
-                  <div style={{ width: "100%", backgroundColor: "#f0ebe0", borderRadius: "8px", height: "8px" }}>
-                    <div 
-                      style={{ 
-                        width: `${(book.currentPage / book.totalPages) * 100}%`,
-                        backgroundColor: "#cd853f",
-                        height: "8px",
-                        borderRadius: "8px",
-                        transition: "width 0.3s ease"
-                      }}
-                    ></div>
-                  </div>
-
-                  <div className="progress-controls" style={{ marginTop: "10px" }}>
-                    <input 
-                      type="number" 
-                      className="progress-input"
-                      placeholder="Current page"
-                      max={book.totalPages}
-                      min={0}
-                    />
-                    <button className="btn btn-small">Update Progress</button>
-                    <button 
-                      className="btn btn-small"
-                      onClick={() => markCurrentAsFinished(book)}
-                    >
-                      ✅ Mark as Finished
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <CurrentlyReadingItem 
+                key={book.id}
+                book={book}
+                onUpdateProgress={updateReadingProgress}
+                onMarkAsFinished={markCurrentAsFinished}
+                onSelectBook={setSelectedBook}
+                onEdit={openEditModal}
+              />
             ))}
           </div>
         )}
@@ -181,7 +354,7 @@ function App() {
     );
   };
 
-  // Helper to render the Goal page ui
+  // Helper to render the Goal page UI
   const renderGoalPage = () => {
     return (
       <div>
@@ -199,19 +372,27 @@ function App() {
                   <BookList books={[book]} onSelectBook={setSelectedBook} />
                 </div>
 
-                <div style={{ marginTop: "0.5rem", display: "flex", gap: "8px" }}>
+                <div style={{ marginTop: "0.5rem", display: "flex", gap: "8px", flexWrap: "wrap" }}>
                   <button
                     className="btn btn-small"
                     onClick={() => startReading(book)}
                   >
-                    📖 Start Reading
+                    Start Reading
                   </button>
 
                   <button
                     className="btn btn-small"
                     onClick={() => markAsRead(book)}
                   >
-                    ✅ Mark as Read
+                    Mark as Read
+                  </button>
+
+                  <button
+                    className="btn btn-small btn-secondary"
+                    onClick={() => openEditModal(book, "goal")}
+                    title="Edit book details"
+                  >
+                    Edit
                   </button>
 
                   <button
@@ -220,60 +401,109 @@ function App() {
                       setGoalBooks((prev) => prev.filter((b) => b.id !== book.id))
                     }
                   >
-                    ❌ Remove
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )} 
-      </div>
-    );
-  };
-
-  // Helper to render the Read page UI
-  const renderReadPage = () => {
-    return (
-      <div>
-        <h2 style={{ textAlign: "center", marginTop: "12px", color: "#3a2f1f" }}>Read</h2>
-
-        {readBooks.length === 0 ? (
-          <div className="no-books" style={{ marginTop: "1rem" }}>
-            <p>No books marked as read yet.</p>
-          </div>
-        ) : (
-          <div className="book-list" style={{ padding: "1rem" }}>
-            {readBooks.map((book) => (
-              <div key={book.id} style={{ display: "flex", flexDirection: "column" }}>
-                <div onClick={() => setSelectedBook(book)} style={{ cursor: "pointer" }}>
-                  <div className="book-card">
-                    <h3 className="book-title">{book.title}</h3>
-                    <p className="book-author">by {book.author}</p>
-                    <div className="book-metadata">
-                      <p style={{ fontSize: "0.8rem", color: "#6b5b3d" }}>
-                        {book.pages} pages • {book.genre}
-                      </p>
-                      <p style={{ fontSize: "0.8rem", color: "#4a7c59", marginTop: "4px" }}>
-                        Finished: {new Date(book.finishedDate).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div style={{ marginTop: "0.5rem" }}>
-                  <button
-                    className="btn btn-small btn-danger"
-                    onClick={() =>
-                      setReadBooks((prev) => prev.filter((b) => b.id !== book.id))
-                    }
-                  >
-                    ❌ Remove
+                    Remove
                   </button>
                 </div>
               </div>
             ))}
           </div>
         )}
+      </div>
+    );
+  };
+
+  // Helper to render star rating display
+  const renderStars = (rating) => {
+    return '★'.repeat(rating) + '☆'.repeat(5 - rating);
+  };
+
+  // Helper to render the Read page UI with bookshelf design
+  const renderReadPage = () => {
+    return (
+      <div>
+        <h2 style={{ textAlign: "center", marginTop: "12px", color: "#3a2f1f" }}>My Bookshelf</h2>
+
+        {readBooks.length === 0 ? (
+          <div className="no-books" style={{ marginTop: "1rem" }}>
+            <p>No books on your shelf yet. Start reading to fill it up!</p>
+          </div>
+        ) : (
+          <div className="bookshelf-container" style={{ padding: "1rem" }}>
+            <div className="bookshelf">
+              {readBooks.map((book, index) => {
+                // Generate a unique color for each book based on its title
+                const bookHue = (book.title ? book.title.charCodeAt(0) + book.title.length : index) * 137.508; // Golden angle
+                
+                return (
+                  <div 
+                    key={book.id} 
+                    className="book-spine" 
+                    onClick={() => setSelectedBook(book)}
+                    style={{
+                      '--book-hue': bookHue % 360
+                    }}
+                  >
+                    <div className="book-spine-content">
+                      <div className="book-spine-title">{book.title}</div>
+                      <div className="book-spine-author">{book.author}</div>
+                      <div className="book-spine-rating">{renderStars(book.rating || 0)}</div>
+                    </div>
+                    
+                    {/* Edit button */}
+                    <button
+                      className="edit-book-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openEditModal(book, "read");
+                      }}
+                      title="Edit book details"
+                    >
+                      ✎
+                    </button>
+                    
+                    <button
+                      className="remove-book-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setReadBooks((prev) => prev.filter((b) => b.id !== book.id));
+                      }}
+                      title="Remove from shelf"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // Debug component to show localStorage status
+  const DebugInfo = () => {
+    // Only show in development - simple browser check
+    const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    
+    if (!isDevelopment) return null;
+    
+    return (
+      <div style={{ 
+        position: 'fixed', 
+        bottom: '10px', 
+        right: '10px', 
+        background: 'rgba(0,0,0,0.8)', 
+        color: 'white', 
+        padding: '10px', 
+        borderRadius: '5px',
+        fontSize: '12px',
+        zIndex: 9999
+      }}>
+        <div>Goal Books: {goalBooks.length}</div>
+        <div>Read Books: {readBooks.length}</div>
+        <div>Currently Reading: {currentlyReading.length}</div>
+        <div>Data Loaded: {dataLoaded ? 'Yes' : 'No'}</div>
       </div>
     );
   };
@@ -294,7 +524,7 @@ function App() {
         {/* Mobile Header */}
         <div className="mobile-header" style={{ display: "none" }}>
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className="btn">
-            ☰ Menu
+            Menu
           </button>
           <h1>Hello, Bookish</h1>
         </div>
@@ -311,7 +541,7 @@ function App() {
             />
 
             {loading && <div className="spinner"></div>}
-            {error && <p className="error">❌ {error}</p>}
+            {error && <p className="error">{error}</p>}
 
             {!loading && !error && <BookList books={books} onSelectBook={setSelectedBook} />}
 
@@ -342,6 +572,16 @@ function App() {
             goalBooks={goalBooks}
           />
         )}
+
+        {/* DATA MANAGEMENT */}
+        {currentPage === "data" && (
+          <DataManager 
+            goalBooks={goalBooks}
+            readBooks={readBooks}
+            currentlyReading={currentlyReading}
+            onImportData={handleImportData}
+          />
+        )}
       </div>
 
       <BookModal
@@ -350,9 +590,32 @@ function App() {
         onAddToGoal={addToGoal}
         isInGoal={isBookInGoal(selectedBook)}
       />
+
+      <ReviewModal
+        isOpen={reviewModalOpen}
+        book={bookToReview}
+        onClose={() => {
+          setReviewModalOpen(false);
+          setBookToReview(null);
+        }}
+        onSubmit={addBookWithReview}
+      />
+
+      <EditBookModal
+        isOpen={editModalOpen}
+        book={bookToEdit}
+        bookType={bookEditType}
+        onClose={() => {
+          setEditModalOpen(false);
+          setBookToEdit(null);
+          setBookEditType("");
+        }}
+        onSave={saveEditedBook}
+      />
+
+      <DebugInfo />
     </div>
   );
 }
 
 export default App;
-

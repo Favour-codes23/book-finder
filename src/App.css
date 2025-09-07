@@ -62,8 +62,8 @@
 }
 
 .book-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 20px rgba(139, 115, 85, 0.2);
+  transform: translateY(-6px);
+  box-shadow: 0 8px 25px rgba(139, 115, 85, 0.25);
   border-color: #d4c4a0;
 }
 
@@ -189,13 +189,14 @@
   background-color: #fefcf7;
   color: #3a2f1f;
   font-family: 'Georgia, serif';
-  transition: border 0.2s ease;
+  transition: border 0.2s ease, transform 0.2s ease;
 }
 
 .search-input:focus {
   border-color: #cd853f;
   outline: none;
   box-shadow: 0 0 8px rgba(205, 133, 63, 0.2);
+  transform: translateY(-1px);
 }
 
 /* =======================
@@ -219,7 +220,7 @@
 
 .btn:hover {
   background: linear-gradient(135deg, #a0522d, #daa520);
-  transform: scale(1.05);
+  transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
 }
 
@@ -251,56 +252,68 @@
 }
 
 /* =======================
-   Reading Progress (NEW)
+   Reading Progress
 ======================= */
 .reading-item {
   background: #f9f6f0;
-  padding: 15px;
+  padding: 18px;
   border-radius: 12px;
   border: 1px solid #e8dcc0;
+  margin-bottom: 16px;
 }
 
 .progress-section {
   background: #fefcf7;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 15px;
+  border-radius: 10px;
   border: 1px solid #f0ebe0;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .progress-info {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   font-size: 0.9rem;
   color: #5d4e37;
+  font-weight: 500;
 }
 
 .progress-controls {
   display: flex;
   gap: 10px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .progress-input {
-  padding: 6px 10px;
+  padding: 8px 12px;
   border: 1px solid #e8dcc0;
   border-radius: 6px;
   background: #fefcf7;
   color: #3a2f1f;
   font-size: 0.9rem;
   width: 120px;
+  font-family: 'Georgia, serif';
+  transition: border 0.2s ease, transform 0.2s ease;
 }
 
 .progress-input:focus {
   border-color: #cd853f;
   outline: none;
+  box-shadow: 0 0 8px rgba(205, 133, 63, 0.2);
+  transform: translateY(-1px);
 }
 
 .book-metadata {
-  padding: 8px 0;
+  padding: 12px 0 8px 0;
   border-top: 1px solid #f0ebe0;
-  margin-top: 8px;
+  margin-top: 12px;
+}
+
+.book-metadata p {
+  margin: 4px 0;
+  line-height: 1.4;
 }
 
 .rating-display {
@@ -312,13 +325,13 @@
    Spinner
 ======================= */
 .spinner {
-  border: 6px solid #f0ebe0;
-  border-top: 6px solid #cd853f;
+  border: 8px solid #f0ebe0;
+  border-top: 8px solid #cd853f;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   animation: spin 1s linear infinite;
-  margin: 20px auto;
+  margin: 30px auto;
 }
 
 @keyframes spin {
@@ -404,19 +417,19 @@
 .goal-item {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
+  margin-bottom: 8px;
 }
 
-/* make BookList inside Goal/Read a little tighter */
 .goal-item .book-list,
 .goal-item .book-card {
   margin: 0;
   padding: 0;
 }
 
-/* Your existing App.css styles remain the same, plus these additions: */
-
-/* Sidebar Styles */
+/* =======================
+   Sidebar Styles
+======================= */
 .sidebar-nav-btn:hover {
   background-color: #f0ebe0 !important;
 }
@@ -425,12 +438,10 @@
   background-color: #e8dcc0 !important;
 }
 
-/* Main content adjustments for sidebar */
 .main-content {
   transition: margin-left 0.3s ease;
 }
 
-/* Mobile Header (hidden by default, shown on mobile) */
 .mobile-header {
   display: none;
   align-items: center;
@@ -447,7 +458,199 @@
   font-weight: 600;
 }
 
-/* Responsive Design */
+/* =======================
+   Button Groups
+======================= */
+.button-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* =======================
+   Bookshelf Design (Updated)
+======================= */
+.bookshelf-container {
+  background: linear-gradient(180deg, #f5f2e8 0%, #faf7f0 100%);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px;
+  box-shadow: 0 4px 12px rgba(139, 115, 85, 0.15);
+  border: 2px solid #e8dcc0;
+}
+
+.bookshelf {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  background: linear-gradient(180deg, #8b7355 0%, #a0926b 100%);
+  border-radius: 8px;
+  padding: 20px 15px;
+  position: relative;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+  min-height: 240px;
+  align-items: flex-end;
+}
+
+.bookshelf::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #6b5b3d, #7a6b4f, #6b5b3d);
+  border-radius: 8px 8px 0 0;
+}
+
+.bookshelf::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #6b5b3d, #7a6b4f, #6b5b3d);
+  border-radius: 0 0 8px 8px;
+}
+
+.book-spine {
+  width: 45px;
+  height: 220px;
+  background: linear-gradient(135deg, 
+    hsl(calc(var(--book-hue, 30)), 60%, 65%), 
+    hsl(calc(var(--book-hue, 30)), 65%, 75%)
+  );
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 
+    2px 2px 6px rgba(0,0,0,0.3),
+    inset 1px 1px 2px rgba(255,255,255,0.3);
+  border: 1px solid rgba(0,0,0,0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 4px;
+}
+
+.book-spine:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 
+    3px 8px 15px rgba(0,0,0,0.4),
+    inset 1px 1px 2px rgba(255,255,255,0.4);
+  z-index: 10;
+}
+
+.book-spine-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  color: #fefcf7;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+  width: 100%;
+}
+
+.book-spine-title {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.1;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  word-break: break-word;
+  overflow: hidden;
+  padding: 4px 0;
+  max-height: 140px;
+}
+
+.book-spine-author {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 0.6rem;
+  opacity: 0.9;
+  text-align: center;
+  margin-bottom: 8px;
+  max-height: 40px;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+.book-spine-rating {
+  font-size: 0.7rem;
+  writing-mode: horizontal-tb;
+  text-orientation: upright;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.remove-book-btn {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(139, 69, 19, 0.9);
+  color: #fefcf7;
+  border: 2px solid #fefcf7;
+  cursor: pointer;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 20;
+}
+
+.edit-book-btn {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(205, 133, 63, 0.9);
+  color: #fefcf7;
+  border: 2px solid #fefcf7;
+  cursor: pointer;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 20;
+}
+
+.book-spine:hover .remove-book-btn,
+.book-spine:hover .edit-book-btn {
+  opacity: 1;
+}
+
+.remove-book-btn:hover {
+  background: rgba(139, 65, 66, 0.9);
+  transform: scale(1.1);
+}
+
+.edit-book-btn:hover {
+  background: rgba(218, 165, 32, 0.9);
+  transform: scale(1.1);
+}
+
+/* =======================
+   Responsive Design
+======================= */
 @media (max-width: 768px) {
   .mobile-header {
     display: flex !important;
@@ -470,7 +673,7 @@
   }
   
   .header-container {
-    display: none; /* Hide main header on mobile since we have mobile header */
+    display: none;
   }
   
   .book-list {
@@ -482,6 +685,42 @@
   .book-card {
     padding: 12px;
   }
+
+  .analytics-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .analytics-two-column {
+    grid-template-columns: 1fr !important;
+  }
+
+  .modal-content {
+    width: 95%;
+    max-width: none;
+    margin: 20px;
+    max-height: 90vh;
+  }
+
+  .book-spine {
+    width: 35px;
+    height: 180px;
+  }
+  
+  .book-spine-title {
+    font-size: 0.6rem;
+    max-height: 120px;
+  }
+  
+  .book-spine-author {
+    font-size: 0.5rem;
+    max-height: 30px;
+  }
+  
+  .bookshelf {
+    padding: 15px 10px;
+    gap: 4px;
+    min-height: 200px;
+  }
 }
 
 @media (min-width: 769px) {
@@ -490,156 +729,19 @@
   }
 }
 
-/* Updated Reading Item Styles */
-.reading-item {
-  background: #f9f6f0;
-  padding: 18px;
-  border-radius: 12px;
-  border: 1px solid #e8dcc0;
-  margin-bottom: 16px;
-}
-
-.progress-section {
-  background: #fefcf7;
-  padding: 15px;
-  border-radius: 10px;
-  border: 1px solid #f0ebe0;
-  margin-top: 12px;
-}
-
-.progress-info {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  font-size: 0.9rem;
-  color: #5d4e37;
-  font-weight: 500;
-}
-
-.progress-controls {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.progress-input {
-  padding: 8px 12px;
-  border: 1px solid #e8dcc0;
-  border-radius: 6px;
-  background: #fefcf7;
-  color: #3a2f1f;
-  font-size: 0.9rem;
-  width: 120px;
-  font-family: 'Georgia, serif';
-}
-
-.progress-input:focus {
-  border-color: #cd853f;
-  outline: none;
-  box-shadow: 0 0 8px rgba(205, 133, 63, 0.2);
-}
-
-/* Enhanced Book Metadata */
-.book-metadata {
-  padding: 12px 0 8px 0;
-  border-top: 1px solid #f0ebe0;
-  margin-top: 12px;
-}
-
-.book-metadata p {
-  margin: 4px 0;
-  line-height: 1.4;
-}
-
-/* Goal Item Improvements */
-.goal-item {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.goal-item .book-list,
-.goal-item .book-card {
-  margin: 0;
-  padding: 0;
-}
-
-/* Button Groups */
-.button-group {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-/* Sidebar Toggle Button Styles */
-.sidebar-toggle {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 1001;
-  background: linear-gradient(135deg, #8b4513, #cd853f);
-  color: #fefcf7;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 16px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-family: 'Georgia, serif';
-  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
-  transition: all 0.2s ease;
-}
-
-.sidebar-toggle:hover {
-  background: linear-gradient(135deg, #a0522d, #daa520);
-  transform: scale(1.05);
-}
-
-/* Analytics Responsive Design */
-@media (max-width: 768px) {
-  .analytics-grid {
-    grid-template-columns: 1fr !important;
+@media (max-width: 480px) {
+  .book-spine {
+    width: 30px;
+    height: 160px;
   }
   
-  .analytics-two-column {
-    grid-template-columns: 1fr !important;
+  .book-spine-title {
+    font-size: 0.55rem;
+    max-height: 100px;
   }
-}
-
-/* Enhanced Hover Effects */
-.book-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 8px 25px rgba(139, 115, 85, 0.25);
-}
-
-.btn:hover {
-  transform: translateY(-1px);
-}
-
-/* Improved Focus States */
-.search-input:focus,
-.progress-input:focus {
-  transform: translateY(-1px);
-}
-
-/* Loading Animation Enhancement */
-.spinner {
-  border: 8px solid #f0ebe0;
-  border-top: 8px solid #cd853f;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-  margin: 30px auto;
-}
-
-/* Better Modal on Mobile */
-@media (max-width: 768px) {
-  .modal-content {
-    width: 95%;
-    max-width: none;
-    margin: 20px;
-    max-height: 90vh;
+  
+  .book-spine-author {
+    font-size: 0.45rem;
+    max-height: 25px;
   }
 }

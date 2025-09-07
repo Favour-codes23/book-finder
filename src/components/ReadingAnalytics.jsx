@@ -110,12 +110,15 @@ function ReadingAnalytics({ readBooks, currentlyReading, goalBooks }) {
       </div>
 
       {/* Stats Grid */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-        gap: "20px",
-        marginBottom: "30px"
-      }}>
+      <div 
+        className="analytics-grid"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+          gap: "20px",
+          marginBottom: "30px"
+        }}
+      >
         <StatCard 
           icon="📚" 
           title="Books This Month" 
@@ -205,12 +208,15 @@ function ReadingAnalytics({ readBooks, currentlyReading, goalBooks }) {
       </div>
 
       {/* Two Column Layout for remaining sections */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "20px",
-        marginBottom: "20px"
-      }}>
+      <div 
+        className="analytics-two-column"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: "20px",
+          marginBottom: "20px"
+        }}
+      >
         {/* Genre Diversity */}
         <div style={{
           backgroundColor: "#fefcf7",
@@ -350,7 +356,7 @@ function ReadingAnalytics({ readBooks, currentlyReading, goalBooks }) {
           </p>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-            {readBooks.slice(-3).reverse().map((book, index) => (
+            {readBooks.slice(-3).reverse().map((book) => (
               <div 
                 key={book.id}
                 style={{
