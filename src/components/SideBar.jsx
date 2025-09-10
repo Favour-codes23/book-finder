@@ -22,6 +22,14 @@ function Sidebar({ currentPage, setCurrentPage, sidebarOpen, setSidebarOpen, goa
 
   const stats = calculateQuickStats();
 
+  const handleNavClick = (page) => {
+    setCurrentPage(page);
+    // Close sidebar on mobile after navigation
+    if (window.innerWidth <= 768) {
+      setSidebarOpen(false);
+    }
+  };
+
   return (
     <>
       {/* Overlay for mobile */}
@@ -110,7 +118,7 @@ function Sidebar({ currentPage, setCurrentPage, sidebarOpen, setSidebarOpen, goa
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
             
             <button
-              onClick={() => { setCurrentPage("home"); setSidebarOpen(false); }}
+              onClick={() => handleNavClick("home")}
               className={`sidebar-nav-btn ${currentPage === "home" ? "active" : ""}`}
               style={{
                 display: "flex",
@@ -134,7 +142,7 @@ function Sidebar({ currentPage, setCurrentPage, sidebarOpen, setSidebarOpen, goa
             </button>
 
             <button
-              onClick={() => { setCurrentPage("currently-reading"); setSidebarOpen(false); }}
+              onClick={() => handleNavClick("currently-reading")}
               className={`sidebar-nav-btn ${currentPage === "currently-reading" ? "active" : ""}`}
               style={{
                 display: "flex",
@@ -171,7 +179,7 @@ function Sidebar({ currentPage, setCurrentPage, sidebarOpen, setSidebarOpen, goa
             </button>
 
             <button
-              onClick={() => { setCurrentPage("goal"); setSidebarOpen(false); }}
+              onClick={() => handleNavClick("goal")}
               className={`sidebar-nav-btn ${currentPage === "goal" ? "active" : ""}`}
               style={{
                 display: "flex",
@@ -208,7 +216,7 @@ function Sidebar({ currentPage, setCurrentPage, sidebarOpen, setSidebarOpen, goa
             </button>
 
             <button
-              onClick={() => { setCurrentPage("read"); setSidebarOpen(false); }}
+              onClick={() => handleNavClick("read")}
               className={`sidebar-nav-btn ${currentPage === "read" ? "active" : ""}`}
               style={{
                 display: "flex",
@@ -245,7 +253,7 @@ function Sidebar({ currentPage, setCurrentPage, sidebarOpen, setSidebarOpen, goa
             </button>
 
             <button
-              onClick={() => { setCurrentPage("analytics"); setSidebarOpen(false); }}
+              onClick={() => handleNavClick("analytics")}
               className={`sidebar-nav-btn ${currentPage === "analytics" ? "active" : ""}`}
               style={{
                 display: "flex",
@@ -269,7 +277,7 @@ function Sidebar({ currentPage, setCurrentPage, sidebarOpen, setSidebarOpen, goa
             </button>
 
             <button
-              onClick={() => { setCurrentPage("data"); setSidebarOpen(false); }}
+              onClick={() => handleNavClick("data")}
               className={`sidebar-nav-btn ${currentPage === "data" ? "active" : ""}`}
               style={{
                 display: "flex",

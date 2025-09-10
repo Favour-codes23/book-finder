@@ -104,6 +104,43 @@ function App() {
     }
   }, [currentlyReading, dataLoaded, saveToStorage, STORAGE_KEYS.currentlyReading]);
 
+  // Close sidebar when clicking outside on mobile
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (window.innerWidth <= 768 && sidebarOpen) {
+        const sidebar = document.querySelector('.sidebar');
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        
+        if (sidebar && !sidebar.contains(event.target) && 
+            mobileMenuBtn && !mobileMenuBtn.contains(event.target)) {
+          setSidebarOpen(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [sidebarOpen]);
+
+  // Close sidebar when screen size changes to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        setSidebarOpen(true);
+      } else {
+        setSidebarOpen(false);
+      }
+    };
+
+    // Set initial state
+    handleResize();
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // existing search function
   const searchBooks = async (newQuery, reset = false) => {
     setLoading(true);
@@ -520,11 +557,18 @@ function App() {
         currentlyReading={currentlyReading}
       />
       
-      <div className="main-content" style={{ flex: 1, marginLeft: sidebarOpen ? "280px" : "0", transition: "margin-left 0.3s ease" }}>
+      <div className="main-content" style={{ 
+        flex: 1, 
+        marginLeft: sidebarOpen ? "280px" : "0", 
+        transition: "margin-left 0.3s ease" 
+      }}>
         {/* Mobile Header */}
-        <div className="mobile-header" style={{ display: "none" }}>
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="btn">
-            Menu
+        <div className="mobile-header">
+          <button 
+            onClick={() => setSidebarOpen(!sidebarOpen)} 
+            className="mobile-menu-btn"
+          >
+            ☰ Menu
           </button>
           <h1>Hello, Bookish</h1>
         </div>
@@ -532,7 +576,9 @@ function App() {
         {/* HOME */}
         {currentPage === "home" && (
           <div>
-            <Header />
+            <div className="header-container">
+              <Header />
+            </div>
             <SearchBar
               onSearch={(q) => {
                 searchBooks(q, true);
@@ -583,6 +629,14 @@ function App() {
           />
         )}
       </div>
+
+      {/* Sidebar overlay for mobile */}
+      {sidebarOpen && window.innerWidth <= 768 && (
+        <div 
+          className="sidebar-overlay"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
       <BookModal
         book={selectedBook}
