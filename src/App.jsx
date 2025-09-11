@@ -124,18 +124,17 @@ function App() {
     };
   }, [sidebarOpen]);
 
-  // Close sidebar when screen size changes to desktop
+  // Handle sidebar behavior - always start closed, only close on mobile when resizing
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 768) {
-        setSidebarOpen(true);
-      } else {
+      // Only close sidebar on mobile, don't auto-open on any screen size
+      if (window.innerWidth <= 768) {
         setSidebarOpen(false);
       }
     };
 
-    // Set initial state
-    handleResize();
+    // Set initial state - start closed on all devices
+    setSidebarOpen(false);
     
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
