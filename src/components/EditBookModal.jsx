@@ -76,7 +76,7 @@ function EditBookModal({ isOpen, book, onClose, onSave, bookType }) {
       rating: parseInt(formData.rating) || 0,
       review: formData.review.trim(),
       genre: formData.genre.trim() || "Fiction",
-      pages: parseInt(formData.totalPages) // For compatibility
+      pages: parseInt(formData.totalPages) 
     };
 
     onSave(updatedBook);
@@ -84,7 +84,7 @@ function EditBookModal({ isOpen, book, onClose, onSave, bookType }) {
 
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
+    
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: "" }));
     }
@@ -130,7 +130,7 @@ function EditBookModal({ isOpen, book, onClose, onSave, bookType }) {
         </h2>
 
         <form onSubmit={handleSubmit}>
-          {/* Title */}
+          
           <div style={{ marginBottom: "1rem" }}>
             <label 
               htmlFor="edit-title" 
@@ -165,7 +165,6 @@ function EditBookModal({ isOpen, book, onClose, onSave, bookType }) {
             )}
           </div>
 
-          {/* Author */}
           <div style={{ marginBottom: "1rem" }}>
             <label 
               htmlFor="edit-author" 
@@ -200,7 +199,6 @@ function EditBookModal({ isOpen, book, onClose, onSave, bookType }) {
             )}
           </div>
 
-          {/* Total Pages and Current Page (side by side) */}
           <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
             <div style={{ flex: 1 }}>
               <label 
@@ -275,7 +273,6 @@ function EditBookModal({ isOpen, book, onClose, onSave, bookType }) {
             )}
           </div>
 
-          {/* Genre */}
           <div style={{ marginBottom: "1rem" }}>
             <label 
               htmlFor="edit-genre" 
@@ -306,7 +303,6 @@ function EditBookModal({ isOpen, book, onClose, onSave, bookType }) {
             />
           </div>
 
-          {/* Rating and Review for finished books */}
           {bookType === "read" && (
             <>
               <div style={{ marginBottom: "1rem" }}>
@@ -359,7 +355,6 @@ function EditBookModal({ isOpen, book, onClose, onSave, bookType }) {
             </>
           )}
 
-          {/* Action Buttons */}
           <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end", marginTop: "1.5rem" }}>
             <button
               type="button"

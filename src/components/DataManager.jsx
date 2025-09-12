@@ -41,7 +41,6 @@ function DataManager({ goalBooks, readBooks, currentlyReading, onImportData }) {
       }
     });
 
-    // Validate book objects have required fields
     const allBooks = [...(data.goalBooks || []), ...(data.readBooks || []), ...(data.currentlyReading || [])];
     const requiredBookFields = ['id'];
     
@@ -84,7 +83,7 @@ function DataManager({ goalBooks, readBooks, currentlyReading, onImportData }) {
           return;
         }
 
-        // Show confirmation dialog
+        
         const totalBooks = importedData.totalBooks || 
           (importedData.goalBooks.length + importedData.readBooks.length + importedData.currentlyReading.length);
         
@@ -111,7 +110,6 @@ Are you sure you want to continue?`;
 
     reader.readAsText(file);
     
-    // Reset file input
     event.target.value = '';
   };
 
@@ -155,7 +153,6 @@ This action cannot be undone. Are you sure?`;
 
       <div style={{ maxWidth: "600px", margin: "0 auto", padding: "20px" }}>
         
-        {/* Current Data Summary */}
         <div style={{
           backgroundColor: "#fefcf7",
           border: "1px solid #e8dcc0",
@@ -202,7 +199,6 @@ This action cannot be undone. Are you sure?`;
           </div>
         </div>
 
-        {/* Export Section */}
         <div style={{
           backgroundColor: "#fefcf7",
           border: "1px solid #e8dcc0",
@@ -240,7 +236,6 @@ This action cannot be undone. Are you sure?`;
           )}
         </div>
 
-        {/* Import Section */}
         <div style={{
           backgroundColor: "#fefcf7",
           border: "1px solid #e8dcc0",
@@ -310,7 +305,6 @@ This action cannot be undone. Are you sure?`;
           )}
         </div>
 
-        {/* Danger Zone */}
         <div style={{
           backgroundColor: "#faf2f2",
           border: "1px solid #e8d4d4",

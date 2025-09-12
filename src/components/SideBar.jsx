@@ -67,7 +67,7 @@ function Sidebar({ currentPage, setCurrentPage, sidebarOpen, setSidebarOpen, goa
           boxShadow: "2px 0 10px rgba(139, 115, 85, 0.15)"
         }}
       >
-        {/* Sidebar Header */}
+        
         <div 
           className="sidebar-header"
           style={{
@@ -113,7 +113,6 @@ function Sidebar({ currentPage, setCurrentPage, sidebarOpen, setSidebarOpen, goa
           </div>
         </div>
 
-        {/* Navigation */}
         <nav style={{ padding: "16px", flex: 1 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
             
@@ -301,7 +300,7 @@ function Sidebar({ currentPage, setCurrentPage, sidebarOpen, setSidebarOpen, goa
             </button>
           </div>
 
-          {/* Quick Stats */}
+          
           <div style={{
             marginTop: "auto",
             paddingTop: "20px",
@@ -348,7 +347,6 @@ function Sidebar({ currentPage, setCurrentPage, sidebarOpen, setSidebarOpen, goa
         </nav>
       </div>
 
-      {/* Toggle button for desktop */}
       {!sidebarOpen && (
         <button
           onClick={() => setSidebarOpen(true)}

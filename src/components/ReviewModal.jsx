@@ -88,7 +88,6 @@ function ReviewModal({ isOpen, book, onClose, onSubmit }) {
             </p>
           </div>
 
-          {/* Review Text */}
           <div style={{ marginBottom: "20px" }}>
             <label 
               htmlFor="review" 
@@ -124,7 +123,7 @@ function ReviewModal({ isOpen, book, onClose, onSubmit }) {
             />
           </div>
 
-          {/* Action Buttons */}
+          
           <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
             <button
               type="button"

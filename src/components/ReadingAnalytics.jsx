@@ -109,7 +109,6 @@ function ReadingAnalytics({ readBooks, currentlyReading, goalBooks }) {
         </h2>
       </div>
 
-      {/* Stats Grid */}
       <div 
         className="analytics-grid"
         style={{
@@ -149,7 +148,7 @@ function ReadingAnalytics({ readBooks, currentlyReading, goalBooks }) {
         />
       </div>
 
-      {/* Reading Progress */}
+      
       <div style={{
         backgroundColor: "#fefcf7",
         border: "1px solid #e8dcc0",
@@ -207,7 +206,7 @@ function ReadingAnalytics({ readBooks, currentlyReading, goalBooks }) {
         </p>
       </div>
 
-      {/* Two Column Layout for remaining sections */}
+      
       <div 
         className="analytics-two-column"
         style={{
@@ -217,7 +216,7 @@ function ReadingAnalytics({ readBooks, currentlyReading, goalBooks }) {
           marginBottom: "20px"
         }}
       >
-        {/* Genre Diversity */}
+        
         <div style={{
           backgroundColor: "#fefcf7",
           border: "1px solid #e8dcc0",
@@ -279,7 +278,6 @@ function ReadingAnalytics({ readBooks, currentlyReading, goalBooks }) {
           )}
         </div>
 
-        {/* Current Status */}
         <div style={{
           backgroundColor: "#fefcf7",
           border: "1px solid #e8dcc0",
@@ -331,7 +329,6 @@ function ReadingAnalytics({ readBooks, currentlyReading, goalBooks }) {
         </div>
       </div>
 
-      {/* Recent Activity */}
       <div style={{
         backgroundColor: "#fefcf7",
         border: "1px solid #e8dcc0",
@@ -406,7 +403,7 @@ function ReadingAnalytics({ readBooks, currentlyReading, goalBooks }) {
         )}
       </div>
 
-      {/* Achievement Badges */}
+      
       <div style={{
         backgroundColor: "#fefcf7",
         border: "1px solid #e8dcc0",

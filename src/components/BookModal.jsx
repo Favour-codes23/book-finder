@@ -5,7 +5,7 @@ function BookModal({ book, onClose, onAddToGoal, isInGoal }) {
 
   const info = book.volumeInfo || {};
 
-  // Helper to render star rating
+  //star rating
   const renderStars = (rating) => {
     if (!rating) return null;
     return (
@@ -42,10 +42,10 @@ function BookModal({ book, onClose, onAddToGoal, isInGoal }) {
           <strong>Author(s):</strong> {info.authors ? info.authors.join(", ") : book.author || "Unknown Author"}
         </p>
 
-        {/* Show rating if this book has been reviewed */}
+      
         {book.rating && renderStars(book.rating)}
 
-        {/* Show review if it exists */}
+        
         {book.review && (
           <div style={{ 
             marginBottom: "1rem", 
@@ -91,7 +91,7 @@ function BookModal({ book, onClose, onAddToGoal, isInGoal }) {
             </a>
           )}
 
-          {/* Only show Add to TBR button if book isn't already finished */}
+          
           {!book.rating && (
             <button
               className="btn btn-small"

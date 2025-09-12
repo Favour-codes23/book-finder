@@ -11,7 +11,6 @@ import DataManager from "./components/DataManager";
 import "./App.css";
 
 function App() {
-  // existing app state
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -19,7 +18,6 @@ function App() {
   const [page, setPage] = useState(0);
   const [selectedBook, setSelectedBook] = useState(null);
 
-  // navigation + shelves - removed hardcoded data, will load from localStorage
   const [currentPage, setCurrentPage] = useState("home");
   const [goalBooks, setGoalBooks] = useState([]);
   const [readBooks, setReadBooks] = useState([]);
@@ -27,25 +25,21 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
 
-  // New state for review system
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [bookToReview, setBookToReview] = useState(null);
 
-  // New state for editing functionality
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [bookToEdit, setBookToEdit] = useState(null);
-  const [bookEditType, setBookEditType] = useState(""); // "goal", "currentlyReading", or "read"
+  const [bookEditType, setBookEditType] = useState("");
 
   const maxResults = 10;
 
-  // Storage keys - memoized to avoid dependency issues
   const STORAGE_KEYS = useMemo(() => ({
     goalBooks: 'bookish-goal-books',
     readBooks: 'bookish-read-books', 
     currentlyReading: 'bookish-currently-reading'
   }), []);
 
-  // Helper function to safely parse JSON from localStorage
   const getFromStorage = useCallback((key) => {
     try {
       const item = localStorage.getItem(key);
@@ -57,7 +51,6 @@ function App() {
     }
   }, []);
 
-  // Helper function to safely save to localStorage
   const saveToStorage = useCallback((key, data) => {
     try {
       localStorage.setItem(key, JSON.stringify(data));
@@ -67,7 +60,6 @@ function App() {
     }
   }, []);
 
-  // Load data from localStorage on component mount
   useEffect(() => {
     console.log('Loading data from localStorage...');
     
@@ -85,7 +77,7 @@ function App() {
     setDataLoaded(true);
   }, [getFromStorage, STORAGE_KEYS.goalBooks, STORAGE_KEYS.readBooks, STORAGE_KEYS.currentlyReading]);
 
-  // Save to localStorage whenever the arrays change (but only after initial load)
+
   useEffect(() => {
     if (dataLoaded) {
       saveToStorage(STORAGE_KEYS.goalBooks, goalBooks);
@@ -104,7 +96,6 @@ function App() {
     }
   }, [currentlyReading, dataLoaded, saveToStorage, STORAGE_KEYS.currentlyReading]);
 
-  // Close sidebar when clicking outside on mobile
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (window.innerWidth <= 768 && sidebarOpen) {
@@ -124,7 +115,6 @@ function App() {
     };
   }, [sidebarOpen]);
 
-  // Handle sidebar behavior - always start closed, only close on mobile when resizing
   useEffect(() => {
     const handleResize = () => {
       // Only close sidebar on mobile, don't auto-open on any screen size
@@ -140,7 +130,6 @@ function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // existing search function
   const searchBooks = async (newQuery, reset = false) => {
     setLoading(true);
     setError("");
@@ -182,7 +171,6 @@ function App() {
     }
   };
 
-  // add a book to Goal (To Be Read)
   const addToGoal = (book) => {
     setGoalBooks((prev) => {
       if (prev.some((b) => b.id === book.id)) return prev;
@@ -194,14 +182,12 @@ function App() {
     setCurrentPage("goal");
   };
 
-  // mark a Goal book as Read with rating/review
   const markAsRead = (book) => {
     setGoalBooks((prev) => prev.filter((b) => b.id !== book.id));
     setBookToReview(book);
     setReviewModalOpen(true);
   };
 
-  // Handle adding a book with review to read books
   const addBookWithReview = (book, rating, review) => {
     const bookWithReview = {
       ...book,
@@ -222,9 +208,8 @@ function App() {
     });
     setReviewModalOpen(false);
     setBookToReview(null);
-  };
+  }
 
-  // start reading a book from TBR
   const startReading = (book) => {
     setGoalBooks((prev) => prev.filter((b) => b.id !== book.id));
     setCurrentlyReading((prev) => [...prev, {
@@ -235,14 +220,12 @@ function App() {
     }]);
   };
 
-  // mark currently reading book as finished with review
   const markCurrentAsFinished = (book) => {
     setCurrentlyReading((prev) => prev.filter((b) => b.id !== book.id));
     setBookToReview(book);
     setReviewModalOpen(true);
   };
 
-  // Update reading progress
   const updateReadingProgress = (bookId, newPage) => {
     setCurrentlyReading((prev) => 
       prev.map((book) => 
@@ -253,7 +236,6 @@ function App() {
     );
   };
 
-  // Edit book functionality
   const openEditModal = (book, bookType) => {
     setBookToEdit(book);
     setBookEditType(bookType);
@@ -285,7 +267,6 @@ function App() {
     setBookEditType("");
   };
 
-  // Import data functionality
   const handleImportData = (importedData) => {
     setGoalBooks(importedData.goalBooks || []);
     setReadBooks(importedData.readBooks || []);
@@ -297,7 +278,6 @@ function App() {
     return goalBooks.some((b) => b.id === book.id);
   };
 
-  // Component for individual currently reading items
   const CurrentlyReadingItem = ({ book, onUpdateProgress, onMarkAsFinished, onSelectBook, onEdit }) => {
     const [tempPage, setTempPage] = useState(book.currentPage);
 
@@ -362,7 +342,6 @@ function App() {
     );
   };
 
-  // Helper to render the Currently Reading page
   const renderCurrentlyReadingPage = () => {
     return (
       <div>
@@ -390,7 +369,6 @@ function App() {
     );
   };
 
-  // Helper to render the Goal page UI
   const renderGoalPage = () => {
     return (
       <div>
@@ -448,12 +426,10 @@ function App() {
     );
   };
 
-  // Helper to render star rating display
   const renderStars = (rating) => {
     return '★'.repeat(rating) + '☆'.repeat(5 - rating);
   };
 
-  // Helper to render the Read page UI with bookshelf design
   const renderReadPage = () => {
     return (
       <div>
@@ -485,7 +461,6 @@ function App() {
                       <div className="book-spine-rating">{renderStars(book.rating || 0)}</div>
                     </div>
                     
-                    {/* Edit button */}
                     <button
                       className="edit-book-btn"
                       onClick={(e) => {
@@ -517,7 +492,7 @@ function App() {
     );
   };
 
-  // Debug component to show localStorage status
+  
   const DebugInfo = () => {
     // Only show in development - simple browser check
     const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -561,7 +536,7 @@ function App() {
         marginLeft: sidebarOpen ? "280px" : "0", 
         transition: "margin-left 0.3s ease" 
       }}>
-        {/* Mobile Header */}
+    
         <div className="mobile-header">
           <button 
             onClick={() => setSidebarOpen(!sidebarOpen)} 
@@ -572,7 +547,7 @@ function App() {
           <h1>Hello, Bookish</h1>
         </div>
 
-        {/* HOME */}
+        
         {currentPage === "home" && (
           <div>
             <div className="header-container">
@@ -629,7 +604,6 @@ function App() {
         )}
       </div>
 
-      {/* Sidebar overlay for mobile */}
       {sidebarOpen && window.innerWidth <= 768 && (
         <div 
           className="sidebar-overlay"
